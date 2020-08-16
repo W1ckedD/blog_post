@@ -12,11 +12,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(require('morgan')('dev'));
 
 // Routes
-
 app.use('/auth', require('./routes/users'));
 app.use('/profiles', requireProfile, require('./routes/profiles'));
+app.use('/posts', requireProfile, require('./routes/posts'));
+qpp.use('/comments', requireProfile, require('./routes/comments'));
 app.get('/', (req, res) => {
-    return res.json({ server: 'Express' });
+    return res.status(404).json({ error: 'Undefined ulr' });
 });
 
 const { PORT, NODE_ENV } = process.env;
