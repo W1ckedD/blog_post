@@ -1,9 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { NavigationContainer as Container } from '@react-navigation/native';
 import LoginNavigation from './LoginNavigation';
+import MainNavigation from './MainNavigation';
+import { authenticate } from '../../actions/authActions';
 
-const Navigation = ({ isLoggedIn }) => {
+
+const Navigation = ({ isLoggedIn, authenticate }) => {
+    useEffect(() => {
+        authenticate();
+    }, []);
     if (!isLoggedIn) {
         return (
             <Container>
@@ -11,6 +17,11 @@ const Navigation = ({ isLoggedIn }) => {
             </Container>
         );
     }
+    return (
+        <Container>
+            <MainNavigation />
+        </Container>
+    );
 };
 
 const mapStateToProps = state => {
@@ -20,4 +31,4 @@ const mapStateToProps = state => {
     };
 };
 
-export default connect(mapStateToProps)(Navigation);
+export default connect(mapStateToProps, { authenticate })(Navigation);

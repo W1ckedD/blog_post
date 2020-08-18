@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { globalStyles } from '../../global/styles';
 import Input from '../components/ui/Input';
 import Button from '../components/ui/Button';
+import Toast from '../components/ui/Toast';
 
 const RegisterScreen = ({ isLoggedIn, navigation }) => {
     const [email, setEmail] = useState('');
@@ -14,6 +15,7 @@ const RegisterScreen = ({ isLoggedIn, navigation }) => {
             source={require('../../assets/img/bg.png')}
             style={globalStyles.screen}
         >
+            <Toast msg='' type='danger' />
             <View style={styles.btnContainer}>
                 <Input
                     placeholder='Email'

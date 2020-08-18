@@ -15,7 +15,7 @@ app.use(require('morgan')('dev'));
 app.use('/auth', require('./routes/users'));
 app.use('/profiles', requireProfile, require('./routes/profiles'));
 app.use('/posts', requireProfile, require('./routes/posts'));
-qpp.use('/comments', requireProfile, require('./routes/comments'));
+app.use('/comments', requireProfile, require('./routes/comments'));
 app.get('/', (req, res) => {
     return res.status(404).json({ error: 'Undefined ulr' });
 });

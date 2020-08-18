@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ImageBackground, Image } from 'react-native';
 import { connect } from 'react-redux';
 import { globalStyles } from '../../global/styles';
 import Input from '../components/ui/Input';
 import Button from '../components/ui/Button';
+import Toast from '../components/ui/Toast';
+import { login } from '../actions/authActions';
 
-const LoginScreen = ({ isLoggedIn, navigation }) => {
+const LoginScreen = ({ login, navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     return (
@@ -13,6 +15,7 @@ const LoginScreen = ({ isLoggedIn, navigation }) => {
             source={require('../../assets/img/bg.png')}
             style={globalStyles.screen}
         >
+            <Toast msg='' type='danger' />
             <View style={styles.btnContainer}>
                 <Input
                     placeholder='Email'
@@ -28,7 +31,12 @@ const LoginScreen = ({ isLoggedIn, navigation }) => {
                     secureTextEntry
                     autoCapitalize='none'
                 />
-                <Button title='Login' />
+                <Button
+                    title='Login'
+                    onPress={() => {
+                        login({ email, password });
+                    }}
+                />
             </View>
             <View style={styles.btnContainer}>
                 <Text style={globalStyles.lead}>Don't have and account?</Text>
@@ -71,4 +79,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default connect(mapStateToProps, {})(LoginScreen);
+export default connect(mapStateToProps, { login })(LoginScreen);
