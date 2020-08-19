@@ -5,9 +5,9 @@ import { colors } from '../../../global/colors';
 const Button = props => {
     return (
         <TouchableOpacity
-        activeOpacity={0.8}
+            activeOpacity={0.8}
             style={
-                props.secondary ? { ...styles.secondary } : { ...styles.btn }
+                props.secondary ? { ...styles.secondary, ...props.style } : { ...styles.btn, ...props.style }
             }
             onPress={props.onPress}
         >

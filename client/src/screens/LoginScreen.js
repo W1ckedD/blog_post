@@ -7,7 +7,7 @@ import Button from '../components/ui/Button';
 import Toast from '../components/ui/Toast';
 import { login } from '../actions/authActions';
 
-const LoginScreen = ({ login, navigation }) => {
+const LoginScreen = ({ login, error, navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     return (
@@ -15,7 +15,7 @@ const LoginScreen = ({ login, navigation }) => {
             source={require('../../assets/img/bg.png')}
             style={globalStyles.screen}
         >
-            <Toast msg='' type='danger' />
+            <Toast msg={error} type='danger' />
             <View style={styles.btnContainer}>
                 <Input
                     placeholder='Email'
@@ -51,13 +51,15 @@ const LoginScreen = ({ login, navigation }) => {
 };
 
 const mapStateToProps = state => {
-    const { isLoggedIn, token, profile } = state.auth;
+    const { isLoggedIn, token, profile, error } = state.auth;
     return {
         isLoggedIn,
         token,
         profile,
+        error
     };
 };
+export default connect(mapStateToProps, { login })(LoginScreen);
 
 const styles = StyleSheet.create({
     screen: {
@@ -79,4 +81,3 @@ const styles = StyleSheet.create({
     },
 });
 
-export default connect(mapStateToProps, { login })(LoginScreen);
