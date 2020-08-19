@@ -5,29 +5,30 @@ import { globalStyles } from '../../global/styles';
 import { colors } from '../../global/colors';
 
 import Button from '../components/ui/Button';
+import Link from '../components/ui/Link';
 
 import { logout } from '../actions/authActions';
+import PostsListItem from '../components/ui/PostsListItem';
 
 const HEIGHT = Dimensions.get('screen').height;
 const WIDTH = Dimensions.get('screen').width;
 
-
-const ProfileScreen = ({ logout }) => {
+const ProfileScreen = ({ logout, navigation }) => {
     return (
-        <View style={globalStyles.screen}>
+        <View style={{...globalStyles.screen, justifyContent: 'flex-end'}}>
             <View style={styles.hero}></View>
-                <Button
-                    style={styles.btnLogout}
-                    secondary
-                    onPress={logout}
-                    title='Logout'
-                />
-                <Button
-                    style={styles.btnEdit}
-                    secondary
-                    onPress={() => console.log('Pressed')}
-                    title='Edit Profile'
-                />
+            <Button
+                style={styles.btnLogout}
+                secondary
+                onPress={logout}
+                title='Logout'
+            />
+            <Button
+                style={styles.btnEdit}
+                secondary
+                onPress={() => console.log('Pressed')}
+                title='Edit Profile'
+            />
             <Image
                 style={styles.imgContainer}
                 source={{
@@ -37,16 +38,23 @@ const ProfileScreen = ({ logout }) => {
             />
             <View style={styles.infoContainer}>
                 <View style={styles.numberContainer}>
-                    <Text style={styles.number}>15</Text>
+                    <Link
+                        text={15}
+                        textStyle={styles.number}
+                        onPress={() => navigation.navigate('friendList')}
+                    />
                     <Text>Friends</Text>
                 </View>
                 <Text style={styles.name}>W1ckedD</Text>
                 <View>
-                    <Text style={styles.number}>102</Text>
+                    <Link text={102} textStyle={styles.number} />
                     <Text>Posts</Text>
                 </View>
             </View>
             <View style={styles.body}></View>
+            <View style={styles.postContainer}>
+                <PostsListItem />
+            </View>
         </View>
     );
 };
@@ -101,13 +109,19 @@ const styles = StyleSheet.create({
     btnLogout: {
         position: 'absolute',
         top: 48,
-        right: WIDTH * 0.45
+        right: WIDTH * 0.45,
     },
     btnEdit: {
         position: 'absolute',
         top: 48,
-        left: WIDTH * 0.4
+        left: WIDTH * 0.4,
     },
+    postContainer: {
+        width: '100%',
+        paddingVertical: 16,
+        marginVertical: 16,
+        alignItems: 'center',
+    }
 });
 
 export default connect(null, { logout })(ProfileScreen);

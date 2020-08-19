@@ -2,15 +2,24 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Feather } from '@expo/vector-icons';
 import { colors } from '../../../global/colors';
+import { connect } from 'react-redux';
 
 import HomeScreen from '../../screens/HomeScreen';
-import ProfileScreen from '../../screens/ProfileScreen';
 import SearchScreen from '../../screens/SearchScreen';
 import CreatePostScreen from '../../screens/CreatePostScreen';
 
+import ProfileScreenStack from './ProfileScreenStack';
+
 const Tab = createBottomTabNavigator();
 
-const MainNavigation = () => {
+const MainNavigation = ({ user }) => {
+    if (!user.hasProfile) {
+        return (
+            <View>
+                <Text>Please create a profile</Text>
+            </View>
+        );
+    }
     return (
         <Tab.Navigator
             tabBarOptions={{
@@ -38,9 +47,15 @@ const MainNavigation = () => {
             <Tab.Screen name='home' component={HomeScreen} />
             <Tab.Screen name='search' component={SearchScreen} />
             <Tab.Screen name='create-post' component={CreatePostScreen} />
-            <Tab.Screen name='profile' component={ProfileScreen} />
+            <Tab.Screen name='profile' component={ProfileScreenStack} />
         </Tab.Navigator>
     );
 };
 
-export default MainNavigation;
+const mapStateToProps = state => {
+    return {
+        user: state.auth.user,
+    };
+};
+
+export default connect(mapStateToProps)(MainNavigation);

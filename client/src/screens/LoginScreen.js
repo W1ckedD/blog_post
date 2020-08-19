@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { View, Text, StyleSheet, ImageBackground, Image } from 'react-native';
 import { connect } from 'react-redux';
 import { globalStyles } from '../../global/styles';
@@ -8,6 +8,7 @@ import Toast from '../components/ui/Toast';
 import { login } from '../actions/authActions';
 
 const LoginScreen = ({ login, error, navigation }) => {
+    const errorToastRef = useRef();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     return (
@@ -15,7 +16,7 @@ const LoginScreen = ({ login, error, navigation }) => {
             source={require('../../assets/img/bg.png')}
             style={globalStyles.screen}
         >
-            <Toast msg={error} type='danger' />
+            <Toast ref={errorToastRef} msg={error} type='danger' />
             <View style={styles.btnContainer}>
                 <Input
                     placeholder='Email'
@@ -34,6 +35,9 @@ const LoginScreen = ({ login, error, navigation }) => {
                 <Button
                     title='Login'
                     onPress={() => {
+                        if (error) {
+                            errorToastRef.current.openToast();
+                        }
                         login({ email, password });
                     }}
                 />
@@ -56,7 +60,7 @@ const mapStateToProps = state => {
         isLoggedIn,
         token,
         profile,
-        error
+        error,
     };
 };
 export default connect(mapStateToProps, { login })(LoginScreen);
@@ -80,4 +84,3 @@ const styles = StyleSheet.create({
         margin: 16,
     },
 });
-

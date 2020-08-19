@@ -1,39 +1,41 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, forwardRef, useImperativeHandle } from 'react';
 import { Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { colors } from '../../../global/colors';
 import Animated, { Easing } from 'react-native-reanimated';
 
-const Toast = props => {
+const Toast = forwardRef((props, ref) => {
     const [opacity] = useState(new Animated.Value(0));
-    const openToast = () => {
-        Animated.timing(opacity, {
-            duration: 500,
-            toValue: 1,
-            easing: Easing.inOut(Easing.ease),
-        }).start();
-    };
-    const closeTost = () => {
+    const closeToast = () => {
         Animated.timing(opacity, {
             duration: 500,
             toValue: 0,
             easing: Easing.inOut(Easing.ease),
         }).start();
     };
-
-    useEffect(() => {
-        if (props.msg) {
-            openToast();
+    useImperativeHandle(ref, () => ({
+        openToast() {
+            Animated.timing(opacity, {
+                duration: 500,
+                toValue: 1,
+                easing: Easing.inOut(Easing.ease),
+            }).start();
         }
-    }, []);
+    }))
     return (
-        <Animated.View style={{ ...styles.body, backgroundColor: colors[props.type], opacity }}>
+        <Animated.View
+            style={{
+                ...styles.body,
+                backgroundColor: colors[props.type],
+                opacity,
+            }}
+        >
             <Text style={styles.msg}>{props.msg}</Text>
-            <TouchableOpacity style={styles.closeBtn} onPress={closeTost}>
+            <TouchableOpacity style={styles.closeBtn} onPress={closeToast}>
                 <Text style={styles.closeBtnText}>X</Text>
             </TouchableOpacity>
         </Animated.View>
     );
-};
+});
 
 const styles = StyleSheet.create({
     body: {
@@ -51,7 +53,7 @@ const styles = StyleSheet.create({
     closeBtn: {
         position: 'absolute',
         right: 12,
-        padding: 4
+        padding: 4,
     },
     closeBtnText: {
         color: 'white',
