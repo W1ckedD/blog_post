@@ -1,4 +1,5 @@
 import React from 'react';
+import { View, Text } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Feather } from '@expo/vector-icons';
 import { colors } from '../../../global/colors';
@@ -7,18 +8,14 @@ import { connect } from 'react-redux';
 import HomeScreen from '../../screens/HomeScreen';
 import SearchScreen from '../../screens/SearchScreen';
 import CreatePostScreen from '../../screens/CreatePostScreen';
-
+import CreateProfileScreen from '../../screens/CreateProfileScreen';
 import ProfileScreenStack from './ProfileScreenStack';
 
 const Tab = createBottomTabNavigator();
 
 const MainNavigation = ({ user }) => {
     if (!user.hasProfile) {
-        return (
-            <View>
-                <Text>Please create a profile</Text>
-            </View>
-        );
+        return <CreateProfileScreen />;
     }
     return (
         <Tab.Navigator

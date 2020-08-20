@@ -6,16 +6,34 @@ import Input from '../components/ui/Input';
 import Button from '../components/ui/Button';
 import Toast from '../components/ui/Toast';
 
-const RegisterScreen = ({ isLoggedIn, navigation }) => {
+import { register } from '../actions/authActions';
+const RegisterScreen = ({ error, register, navigation }) => {
+    const [err, setErr] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [password2, setPassword2] = useState('');
+    const isValid = () => {
+        if(!email.includes('@')) {
+            setErr('Please enter a valid email');
+            return false;
+        }
+        if (password.length < 6) {
+            setErr('Password must be at least 6 characters');
+            return false;
+        }
+        if (password !== password2) {
+            setErr('Passwords do not match');
+            return false;
+        }
+        setErr('');
+        return true;
+    }
     return (
         <ImageBackground
             source={require('../../assets/img/bg.png')}
             style={globalStyles.screen}
         >
-            <Toast msg='' type='danger' />
+            <Toast msg={err || error} type='danger' />
             <View style={styles.btnContainer}>
                 <Input
                     placeholder='Email'
@@ -39,7 +57,11 @@ const RegisterScreen = ({ isLoggedIn, navigation }) => {
                     secureTextEntry
                     autoCapitalize='none'
                 />
-                <Button title='Register' />
+                <Button title='Register' onPress={() => {
+                    if (isValid()) {
+                        register({ email, password });
+                    }
+                }} />
             </View>
             <View style={styles.btnContainer}>
                 <Text style={globalStyles.lead}>Already have an account? </Text>
@@ -54,11 +76,13 @@ const RegisterScreen = ({ isLoggedIn, navigation }) => {
 };
 
 const mapStateToProps = state => {
-    const { isLoggedIn, token, profile } = state.auth;
+    const { isLoggedIn, token, user, msg, error } = state.auth;
     return {
         isLoggedIn,
         token,
-        profile,
+        user,
+        msg,
+        error
     };
 };
 
@@ -82,4 +106,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default connect(mapStateToProps, {})(RegisterScreen);
+export default connect(mapStateToProps, { register })(RegisterScreen);

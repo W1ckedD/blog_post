@@ -2,10 +2,12 @@ import React from 'react';
 import { View, Text, StyleSheet, Image, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import { globalStyles } from '../../global/styles';
-import { colors } from '../../global/colors';
 
 import Button from '../components/ui/Button';
 import Link from '../components/ui/Link';
+import Hero from '../components/ui/Hero';
+import Body from '../components/ui/Body';
+
 
 import { logout } from '../actions/authActions';
 import PostsListItem from '../components/ui/PostsListItem';
@@ -16,7 +18,7 @@ const WIDTH = Dimensions.get('screen').width;
 const ProfileScreen = ({ logout, navigation }) => {
     return (
         <View style={{...globalStyles.screen, justifyContent: 'flex-end'}}>
-            <View style={styles.hero}></View>
+            <Hero />
             <Button
                 style={styles.btnLogout}
                 secondary
@@ -51,7 +53,7 @@ const ProfileScreen = ({ logout, navigation }) => {
                     <Text>Posts</Text>
                 </View>
             </View>
-            <View style={styles.body}></View>
+            <Body />
             <View style={styles.postContainer}>
                 <PostsListItem />
             </View>
@@ -60,30 +62,12 @@ const ProfileScreen = ({ logout, navigation }) => {
 };
 
 const styles = StyleSheet.create({
-    hero: {
-        position: 'absolute',
-        top: -HEIGHT * 1.1,
-        backgroundColor: colors.primary,
-        width: '290%',
-        height: '150%',
-        borderRadius: 1000,
-        zIndex: -10,
-    },
     imgContainer: {
         position: 'absolute',
         top: HEIGHT * 0.15,
         width: 120,
         height: 120,
         borderRadius: 100,
-    },
-    body: {
-        position: 'absolute',
-        bottom: -HEIGHT * 0.8,
-        backgroundColor: '#ccc',
-        width: '290%',
-        height: '150%',
-        borderRadius: 1000,
-        zIndex: -11,
     },
     infoContainer: {
         position: 'absolute',
