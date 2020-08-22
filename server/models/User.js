@@ -4,22 +4,30 @@ const userSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
     },
     password: {
         type: String,
-        required: true
+        required: true,
     },
     verifyToken: String,
     verifyTokenExpiryDate: Date,
     isVerified: {
         type: Boolean,
-        default: false
+        default: false,
     },
-    hasProfile: {
-        type: Boolean,
-        default: false
-    }
+    name: {
+        type: String,
+        required: true,
+    },
+    imgUrl: String,
+    birthday: Date,
+    location: String,
+    bio: String,
+    posts: [mongoose.Types.ObjectId],
+    friends: [mongoose.Types.ObjectId],
+    pendingSentRequests: [mongoose.Types.ObjectId],
+    pendingRecievedRequests: [mongoose.Types.ObjectId],
 });
 
 module.exports = mongoose.model('User', userSchema);

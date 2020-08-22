@@ -23,8 +23,11 @@ export const login = ({ email, password }) => async dispatch => {
         });
         const { user, token, msg } = await res.data;
         const storedToken = await AsyncStorage.setItem('token', token);
-        const storedUser = await AsyncStorage.setItem('user', user);
-        dispatch({ type: 'LOGIN', payload: { token, msg, user } });
+        const storedUserId = await AsyncStorage.setItem('userId', user._id);
+        dispatch({
+            type: 'LOGIN',
+            payload: { token, msg, user_id: storedUserId },
+        });
     } catch (err) {
         dispatch({ type: 'ERROR', payload: err.response.data.error });
     }
@@ -43,14 +46,15 @@ export const logout = () => async dispatch => {
 export const authenticate = () => async dispatch => {
     try {
         const storedToken = await AsyncStorage.getItem('token');
-        const storedUser = await AsyncStorage.getItem('user');
-        console.log(storedUser);
-        if (storedToken && storedUser) {
+        const user_id = await AsyncStorage.getItem('userId');
+        console.log(storedToken);
+        if (storedToken) {
+            console.log(storedToken);
             dispatch({
                 type: 'LOGIN',
                 payload: {
                     token: storedToken,
-                    user: storedUser,
+                    user_id,
                     msg: 'Login successful',
                 },
             });

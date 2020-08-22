@@ -19,8 +19,9 @@ import Hero from '../components/ui/Hero';
 import Toast from '../components/ui/Toast';
 import { createProfile } from '../actions/profileActions';
 
-const CreateProfileScreen = ({ error, token, user, createProfile }) => {
+const CreateProfileScreen = ({ error, token, user_id, createProfile }) => {
     const optionsRef = useRef();
+    const [img, setImg] = useState(null);
     const [imgUrl, setImgUrl] = useState(
         'https://pecb.com/conferences/wp-content/uploads/2017/10/no-profile-picture.jpg'
     );
@@ -50,10 +51,16 @@ const CreateProfileScreen = ({ error, token, user, createProfile }) => {
                 allowsEditing: true,
                 aspect: [4, 3],
                 quality: 1,
-                base64: true,
             });
             if (!result.cancelled) {
-                setImgUrl('data:image/png;base64,' + result.base64);
+                const newImg = {
+                    uri: result.uri,
+                    type: result.type,
+                    name: result.uri.substring(result.uri.lastIndexOf('/')),
+                };
+
+                setImg(newImg);
+                setImgUrl(result.uri);
             }
         } catch (err) {
             console.log(err);
@@ -66,10 +73,16 @@ const CreateProfileScreen = ({ error, token, user, createProfile }) => {
                 allowsEditing: true,
                 aspect: [3, 3],
                 quality: 1,
-                base64: true,
             });
             if (!result.cancelled) {
-                setImgUrl('data:image/png;base64,' + result.base64);
+                const newImg = {
+                    uri: result.uri,
+                    type: result.type,
+                    name: result.uri.substring(result.uri.lastIndexOf('/') + 1),
+                };
+
+                setImg(newImg);
+                setImgUrl(result.uri);
             }
         } catch (err) {
             console.log(err);
@@ -103,7 +116,7 @@ const CreateProfileScreen = ({ error, token, user, createProfile }) => {
                         style={styles.image}
                     />
                 </TWO>
-                <Toast msg={error} type="danger" />
+                <Toast msg={error} type='danger' />
                 <Input
                     placeholder='Name'
                     placeholderTextColor='black'
@@ -143,9 +156,9 @@ const CreateProfileScreen = ({ error, token, user, createProfile }) => {
                     onPress={() => {
                         createProfile({
                             token,
-                            user_id: user._id,
+                            user_id,
                             name,
-                            imgBase64: imgUrl,
+                            img,
                             birthDay,
                             location,
                             bio,
@@ -178,7 +191,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
     return {
         error: state.profile.error,
-        user: state.auth.user,
+        user_id: state.auth.user_id,
         token: state.auth.token,
     };
 };

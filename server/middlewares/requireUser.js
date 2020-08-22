@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const Profile = require('../models/Profile');
+const User = require('../models/User');
 
 module.exports = async (req, res, next) => {
     try {
@@ -9,14 +9,14 @@ module.exports = async (req, res, next) => {
         }
         const token = authorization.replace('Bearer ', '');
         const { id } = jwt.verify(token, process.env.JWT_SECRET);
-        const profile = await Profile.findOne({ user_id: id });
-        if (!profile) {
+        const user = await User.findById(id);
+        if (!user) {
             return res.status(403).json({ error: 'You must be logged in' });
         }
-        req.profile = profile;
+        req.user = user;
         next();
     } catch (err) {
         console.log(err);
         return res.status(500).json({ error: 'Server error' });
     }
-}
+};

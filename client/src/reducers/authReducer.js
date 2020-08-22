@@ -1,4 +1,4 @@
-const initialState = { isLoggedIn: false, token: null, user: null, msg: '', error: '' };
+const initialState = { isLoggedIn: false, token: null, user_id: '', msg: '', error: '' };
 
 export default (state = initialState, action) => {
     switch (action.type) {
@@ -7,7 +7,7 @@ export default (state = initialState, action) => {
                 ...state,
                 isLoggedIn: true,
                 token: action.payload.token,
-                user: action.payload.user,
+                user_id: action.payload.user_id,
                 msg: action.payload.msg,
                 error: '',
             };
@@ -16,7 +16,7 @@ export default (state = initialState, action) => {
                 ...state,
                 isLoggedIn: false,
                 token: null,
-                user: null,
+                user_id: '',
                 msg: '',
                 error: '',
             };

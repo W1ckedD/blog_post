@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Feather } from '@expo/vector-icons';
 import { colors } from '../../../global/colors';
 import { connect } from 'react-redux';
+import { getMyProfile } from '../../actions/profileActions';
 
 import HomeScreen from '../../screens/HomeScreen';
 import SearchScreen from '../../screens/SearchScreen';
@@ -13,8 +14,12 @@ import ProfileScreenStack from './ProfileScreenStack';
 
 const Tab = createBottomTabNavigator();
 
-const MainNavigation = ({ user }) => {
-    if (!user.hasProfile) {
+const MainNavigation = ({ token, getMyProfile, profile }) => {
+    useEffect(() => {
+        getMyProfile({ token });
+    }, []);
+    
+    if (!profile) {
         return <CreateProfileScreen />;
     }
     return (
@@ -51,8 +56,9 @@ const MainNavigation = ({ user }) => {
 
 const mapStateToProps = state => {
     return {
-        user: state.auth.user,
+        token: state.auth.token,
+        profile: state.profile.profile,
     };
 };
 
-export default connect(mapStateToProps)(MainNavigation);
+export default connect(mapStateToProps, { getMyProfile })(MainNavigation);

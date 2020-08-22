@@ -65,14 +65,11 @@ exports.getPostsByProfileId = async (req, res, next) => {
 exports.createPost = async (req, res, next) => {
     try {
         const profile_id = req.profile._id;
-        const { title, body, image_1, image_2, image_3 } = req.body;
+        const { title, body } = req.body;
         const newPost = {
             profile_id,
             title,
             body,
-            image_1,
-            image_2,
-            image_3,
             comments: [],
         };
         const post = await Post.create(newPost);
@@ -90,7 +87,7 @@ exports.createPost = async (req, res, next) => {
 exports.editPost = async (req, res, next) => {
     try {
         const { id } = req.prams;
-        const { title, body, image_1, image_2, image_3 } = req.params;
+        const { title, body } = req.params;
         const profile_id = req.profile._id;
         const post = await Post.findById(id);
         if (post.profile_id != profile_id) {
@@ -100,9 +97,6 @@ exports.editPost = async (req, res, next) => {
         }
         post.title = title;
         post.body = body;
-        post.image_1 = image_1;
-        post.image_2 = image_2;
-        post.image_3 = image_3;
         post.createdAt = Date.now();
         post.updated = true;
         await post.save();
