@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
+const { use } = require('../routes/users');
 
 exports.register = async (req, res, next) => {
     try {
@@ -154,8 +155,7 @@ exports.sendFriendRequrest = async (req, res, next) => {
         }
         if (user.friends.includes(target_id)) {
             return res.status(409).json({
-                error:
-                    'You already have this target user in your friend list',
+                error: 'You already have this target user in your friend list',
             });
         }
         if (user.pendingSentRequests.includes(target_id)) {
@@ -191,8 +191,7 @@ exports.acceptRequest = async (req, res, next) => {
         }
         if (user.friends.includes(target_id)) {
             return res.status(409).json({
-                error:
-                    'You already have this target user in your friend list',
+                error: 'You already have this target user in your friend list',
             });
         }
         user.friends.push(target_id);
@@ -229,8 +228,7 @@ exports.denyRequest = async (req, res, next) => {
         }
         if (user.friends.includes(target_id)) {
             return res.status(409).json({
-                error:
-                    'You already have this target user in your friend list',
+                error: 'You already have this target user in your friend list',
             });
         }
         user.pendingRecievedRequests = user.pendingRecievedRequests.filter(
@@ -253,13 +251,43 @@ exports.denyRequest = async (req, res, next) => {
     }
 };
 
+exports.removeFriend = async (req, res, next) => {
+    try {
+        const { id } = req.body;
+        const user = req.user;
+        const targetUser = await User.findById(id);
+        if (!targetUser) {
+            return res.status(404).json({ error: 'The target user not found' });
+        }
+        if (!user.friends.includes(id)) {
+            return res
+                .status(404)
+                .json({
+                    error: 'The target user not found in your friend list',
+                });
+        }
+        user.friends = user.friends.filter(friend_id => friend_id != id);
+        targetUser.friends = targetUser.friends.file(
+            friend_id => friend_id != user._id
+        );
+        await user.save();
+        await targetUser.save();
+        return res.status(200).json({
+            success: true,
+            friends: user.friends,
+            msg: 'Friend removed successfully',
+        });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({ error: 'Server error' });
+    }
+};
+
 exports.getPendingSentRequests = async (req, res, next) => {
     try {
         const user = req.user;
         const pendingSentRequests = Promise.all(
-            user.pendingSentRequests.map(
-                async id => await User.findById(id)
-            )
+            user.pendingSentRequests.map(async id => await User.findById(id))
         );
         return res.status(200).json({
             success: true,

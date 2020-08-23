@@ -12,9 +12,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(require('morgan')('dev'));
 
 // Routes
-app.use('/auth', require('./routes/users'));
 app.use('/posts', requireUser, require('./routes/posts'));
 app.use('/comments', requireUser, require('./routes/comments'));
+app.use('/', require('./routes/users'));
 app.get('/', (req, res) => {
     return res.status(404).json({ error: 'Undefined ulr' });
 });
