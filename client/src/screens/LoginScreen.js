@@ -35,10 +35,10 @@ const LoginScreen = ({ login, error, navigation }) => {
                 <Button
                     title='Login'
                     onPress={() => {
+                        login({ email, password });
                         if (error) {
                             errorToastRef.current.openToast();
                         }
-                        login({ email, password });
                     }}
                 />
             </View>
@@ -55,7 +55,8 @@ const LoginScreen = ({ login, error, navigation }) => {
 };
 
 const mapStateToProps = state => {
-    const { isLoggedIn, token, profile, error } = state.auth;
+    const { isLoggedIn, token, profile } = state.auth;
+    const { error } = state.error;
     return {
         isLoggedIn,
         token,

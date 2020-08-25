@@ -21,7 +21,7 @@ const upload = multer({ storage, fileFilter });
 
 router.post('/register', usersController.register);
 router.post('/login', usersController.login);
-router.put(
+router.post(
     '/edit-user',
     upload.single('image'),
     requireUser,

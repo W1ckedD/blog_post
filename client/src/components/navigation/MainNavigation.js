@@ -9,19 +9,14 @@ import { getMyProfile } from '../../actions/profileActions';
 import HomeScreen from '../../screens/HomeScreen';
 import SearchScreen from '../../screens/SearchScreen';
 import CreatePostScreen from '../../screens/CreatePostScreen';
-import CreateProfileScreen from '../../screens/CreateProfileScreen';
+import EditProfileScreen from '../../screens/EditProfileScreen';
 import ProfileScreenStack from './ProfileScreenStack';
 
 const Tab = createBottomTabNavigator();
 
-const MainNavigation = ({ token, getMyProfile, profile }) => {
-    useEffect(() => {
-        getMyProfile({ token });
-    }, []);
-    
-    if (!profile) {
-        return <CreateProfileScreen />;
-    }
+const MainNavigation = () => {
+    useEffect(() => {}, []);
+
     return (
         <Tab.Navigator
             tabBarOptions={{

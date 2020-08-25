@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
         bottom: -HEIGHT * 0.8,
         backgroundColor: '#ccc',
         width: '290%',
-        height: '150%',
+        height: HEIGHT * 1.3,
         borderRadius: 1000,
         zIndex: -11,
     },

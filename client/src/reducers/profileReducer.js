@@ -1,4 +1,4 @@
-const initialState = { profile: null, error: '', msg: '' };
+const initialState = { profile: null, msg: '' };
 
 export default (state = initialState, action) => {
     switch (action.type) {
@@ -8,8 +8,6 @@ export default (state = initialState, action) => {
                 profile: action.payload.profile,
                 msg: action.profile.msg,
             };
-        case 'ERROR':
-            return { ...state, error: action.payload };
         default:
             return state;
     }

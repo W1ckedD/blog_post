@@ -5,28 +5,29 @@ import {
     TouchableWithoutFeedback as TWO,
     Image,
     View,
+    ScrollView,
 } from 'react-native';
 import { globalStyles } from '../../global/styles';
 import { connect } from 'react-redux';
 import * as ImagePicker from 'expo-image-picker';
 import Options from '../components/ui/Options';
 import Input from '../components/ui/Input';
-import DatePicker from 'react-native-datepicker';
+import DatePicker from '../components/ui/DatePicker';
 import Constants from 'expo-constants';
 import Button from '../components/ui/Button';
 import Body from '../components/ui/Body';
 import Hero from '../components/ui/Hero';
 import Toast from '../components/ui/Toast';
-import { createProfile } from '../actions/profileActions';
+import { editProfile } from '../actions/profileActions';
 
-const CreateProfileScreen = ({ error, token, user_id, createProfile }) => {
+const EditProfileScreen = ({ error, editProfile }) => {
     const optionsRef = useRef();
     const [img, setImg] = useState(null);
     const [imgUrl, setImgUrl] = useState(
         'https://pecb.com/conferences/wp-content/uploads/2017/10/no-profile-picture.jpg'
     );
     const [name, setName] = useState('');
-    const [birthDay, setBirthday] = useState(new Date('2002'));
+    const [birthDay, setBirthday] = useState({});
     const [location, setLocation] = useState('');
     const [bio, setBio] = useState('');
     const getPermissionAsync = async () => {
@@ -106,67 +107,63 @@ const CreateProfileScreen = ({ error, token, user_id, createProfile }) => {
     ];
     return (
         <TWO onPress={() => optionsRef.current.hideOptions()}>
-            <View style={globalStyles.screen}>
-                <Hero />
-                <TWO onPress={() => optionsRef.current.showOptions()}>
-                    <Image
-                        source={{
-                            uri: imgUrl,
-                        }}
-                        style={styles.image}
+            <ScrollView>
+                <View style={globalStyles.screen}>
+                    <Hero />
+                    <TWO onPress={() => optionsRef.current.showOptions()}>
+                        <Image
+                            source={{
+                                uri: imgUrl,
+                            }}
+                            style={styles.image}
+                        />
+                    </TWO>
+                    <Toast msg={error} type='danger' />
+                    <Input
+                        placeholder='Name'
+                        placeholderTextColor='black'
+                        style={styles.input}
+                        onChangeText={text => setName(text)}
+                        value={name}
                     />
-                </TWO>
-                <Toast msg={error} type='danger' />
-                <Input
-                    placeholder='Name'
-                    placeholderTextColor='black'
-                    style={styles.input}
-                    onChangeText={text => setName(text)}
-                    value={name}
-                />
-                <Text style={styles.text}>Birthday</Text>
+                    <Text style={styles.text}>Birthday</Text>
 
-                <DatePicker
-                    mode='date'
-                    style={{ width: '80%' }}
-                    display='default'
-                    date={birthDay}
-                    placeholder='Select Date'
-                    onDateChange={date => {
-                        setBirthday(date);
-                    }}
-                />
-                <Input
-                    placeholder='Location'
-                    placeholderTextColor='black'
-                    style={styles.input}
-                    onChangeText={text => setLocation(text)}
-                    value={location}
-                />
-                <Input
-                    placeholder='Bio'
-                    placeholderTextColor='black'
-                    style={styles.input}
-                    onChangeText={text => setBio(text)}
-                    value={bio}
-                />
-                <Options ref={optionsRef} items={items} />
-                <Button
-                    title='Create Profile'
-                    onPress={() => {
-                        createProfile({
-                            token,
-                            user_id,
-                            name,
-                            img,
-                            birthDay,
-                            location,
-                            bio,
-                        });
-                    }}
-                />
-                <Body />
-            </View>
+                    <DatePicker
+                        title='Birthday'
+                        getDate={date => setBirthday({ ...date })}
+                    />
+                    <Input
+                        placeholder='Location'
+                        placeholderTextColor='black'
+                        style={styles.input}
+                        onChangeText={text => setLocation(text)}
+                        value={location}
+                    />
+                    <Input
+                        placeholder='Bio'
+                        placeholderTextColor='black'
+                        style={styles.input}
+                        onChangeText={text => setBio(text)}
+                        value={bio}
+                    />
+                    <Options ref={optionsRef} items={items} />
+                    <Button
+                        title='Save'
+                        onPress={() => {
+                            editProfile({
+                                name,
+                                img,
+                                birthday: new Date(
+                                    `${birthDay.year}-${birthDay.month}-${birthDay.day}`
+                                ),
+                                location,
+                                bio,
+                            });
+                        }}
+                    />
+                    <Body />
+                </View>
+            </ScrollView>
         </TWO>
     );
 };
@@ -190,10 +187,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
     return {
-        error: state.profile.error,
-        user_id: state.auth.user_id,
-        token: state.auth.token,
+        error: state.error.error
     };
 };
 
-export default connect(mapStateToProps, { createProfile })(CreateProfileScreen);
+export default connect(mapStateToProps, { editProfile })(EditProfileScreen);

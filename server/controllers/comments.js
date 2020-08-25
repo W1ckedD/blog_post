@@ -1,6 +1,6 @@
 const Comment = require('../models/Comment');
 const Post = require('../models/Post');
-const Profile = require('../models/Profile');
+const User = require('../models/User');
 
 exports.getCommentsByPost = async (req, res, next) => {
     try {
@@ -32,14 +32,14 @@ exports.getCommentById = async (req, res, next) => {
 
 exports.createComment = async (req, res, next) => {
     try {
-        const profile_id = req.profile._id;
+        const user_id = req.user._id;
         const { post_id, name, body } = req.body;
         const post = await Post.findById(post_id);
-        const target_profile = await Profile.findOne({ name });
-        if (!target_profile) {
+        const target_user = await User.findOne({ name });
+        if (!target_user) {
             return res.status(404).json({ error: 'Target profile not found' });
         }
-        const newComment = { post_id, from: profile_id, to: target_profile._id, body };
+        const newComment = { post_id, from: user_id, to: target_user._id, body };
         const comment = await Comment.create(newComment);
         post.comments.push(comment._id);
         await post.save();
@@ -60,12 +60,12 @@ exports.editComment = async (req, res, next) => {
         const { id } = req.params;
         const comment = await Comment.findById(id);
         const { body } = req.body;
-        const profile_id = req.profile._id;
-        const target_profile = await Profile.findOne({ name });
-        if (!target_profile) {
+        const user_id = req.user._id;
+        const target_user = await User.findOne({ name });
+        if (!target_user) {
             return res.status(404).json({ error: 'Target profile not found' });
         }
-        if (comment.from != profile_id) {
+        if (comment.from != user_id) {
             return res.status(403).json({ error: 'You cannot edit comments from profiles other than yours' });
         }
         comment.body = body;
@@ -86,10 +86,10 @@ exports.editComment = async (req, res, next) => {
 exports.removeComment = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const profile_id = req.profile._id;
+        const user_id = req.user._id;
         const comment = await Comment.findById(id);
         const post = await Post.findById(comment.post_id);
-        if (comment.from != profile_id) {
+        if (comment.from != user_id) {
             return res.status(403).json({ error: 'You cannot remove comments from profiles other than yours' });
         }
         post.comments = post.comments.filter(comment_id => comment_id != comment._id);

@@ -28,7 +28,7 @@ const ProfileScreen = ({ logout, navigation }) => {
             <Button
                 style={styles.btnEdit}
                 secondary
-                onPress={() => console.log('Pressed')}
+                onPress={() => navigation.navigate('edit-profile')}
                 title='Edit Profile'
             />
             <Image

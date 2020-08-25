@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
         top: -HEIGHT * 1.1,
         backgroundColor: colors.primary,
         width: '290%',
-        height: '150%',
+        height: HEIGHT * 1.3,
         borderRadius: 1000,
         zIndex: -10,
     },

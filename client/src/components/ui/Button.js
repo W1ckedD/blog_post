@@ -7,7 +7,9 @@ const Button = props => {
         <TouchableOpacity
             activeOpacity={0.8}
             style={
-                props.secondary ? { ...styles.secondary, ...props.style } : { ...styles.btn, ...props.style }
+                props.secondary
+                    ? { ...styles.secondary, ...props.style }
+                    : { ...styles.btn, ...props.style }
             }
             onPress={props.onPress}
         >
