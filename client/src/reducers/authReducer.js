@@ -1,22 +1,14 @@
-const initialState = { isLoggedIn: false, token: null, msg: '' };
+import { LOGIN } from '../actions/types';
+const initialState = { isAuthenticated: false, token: null, user: null };
 
 export default (state = initialState, action) => {
     switch (action.type) {
-        case 'LOGIN':
+        case LOGIN:
             return {
                 ...state,
-                isLoggedIn: true,
+                isAuthenticated: true,
                 token: action.payload.token,
-                msg: action.payload.msg,
-                error: '',
-            };
-        case 'LOGOUT':
-            return {
-                ...state,
-                isLoggedIn: false,
-                token: null,
-                msg: '',
-                error: '',
+                user: action.payload.user,
             };
         default:
             return state;

@@ -1,3 +1,3 @@
 # A simple social media blog post app 
-## using express, mongodb and react-native
+## using express, mongodb and react
 ### still in development phase...

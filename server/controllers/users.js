@@ -53,10 +53,8 @@ exports.login = async (req, res, next) => {
 exports.edituser = async (req, res, next) => {
     try {
         const { name, birthday, location, bio } = req.body;
-        const file = req.file;
         const user = req.user;
         user.name = name;
-        user.imgUrl = file.path;
         user.birthday = birthday;
         user.location = location;
         user.bio = bio;
@@ -260,11 +258,9 @@ exports.removeFriend = async (req, res, next) => {
             return res.status(404).json({ error: 'The target user not found' });
         }
         if (!user.friends.includes(id)) {
-            return res
-                .status(404)
-                .json({
-                    error: 'The target user not found in your friend list',
-                });
+            return res.status(404).json({
+                error: 'The target user not found in your friend list',
+            });
         }
         user.friends = user.friends.filter(friend_id => friend_id != id);
         targetUser.friends = targetUser.friends.file(
@@ -315,4 +311,25 @@ exports.getPendingReceivedRequests = async (req, res, next) => {
         console.log(err);
         return res.status(500).json({ error: 'Server error' });
     }
+};
+
+const path = require('path');
+
+exports.getProfileImageUpload = (req, res, next) => {
+    return res.sendFile(
+        path.join(__dirname, '../', 'views', 'profile-image-upload.html')
+    );
+};
+
+exports.postProfileImageUpload = async (req, res, next) => {
+    try {
+        const file = req.file;
+        const user = req.user;
+        user.imgUrl = file.path;
+        await user.save();
+        return res.status(200).json({
+            success: true,
+            imgUrl: file.path,
+        });
+    } catch (err) {}
 };

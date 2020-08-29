@@ -1,15 +1,13 @@
-const initialState = { error: '' };
+import { ADD_ERROR, CLEAR_ERROR } from '../actions/types';
+const initialState = { msg: '' };
 
 export default (state = initialState, action) => {
     switch (action.type) {
-        case '400':
-        case '403':
-        case '404':
-        case '409':
-        case '422':
-        case '500':
-            return { ...state, error: action.payload };
+        case ADD_ERROR:
+            return { ...state, msg: action.payload };
+        case CLEAR_ERROR:
+            return { ...state, msg: '' };
         default:
             return state;
     }
-};
+}
