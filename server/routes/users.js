@@ -22,6 +22,7 @@ router.get(
 );
 router.get('/friends/:id', requireUser, usersController.getUserFriendsById);
 router.get('/my-friends', requireUser, usersController.getAllMyFriends);
+router.get('/current-user', requireUser, usersController.currentUser);
 router.get('/users/:id', requireUser, usersController.getUserById);
 router.get('/users', requireUser, usersController.getAllUsers);
 module.exports = router;

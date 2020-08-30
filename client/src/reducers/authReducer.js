@@ -1,5 +1,5 @@
-import { LOGIN } from '../actions/types';
-const initialState = { isAuthenticated: false, token: null, user: null };
+import { LOGIN, LOGOUT } from '../actions/types';
+const initialState = { isAuthenticated: false, token: null };
 
 export default (state = initialState, action) => {
     switch (action.type) {
@@ -7,8 +7,13 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isAuthenticated: true,
-                token: action.payload.token,
-                user: action.payload.user,
+                token: action.payload,
+            };
+        case LOGOUT:
+            return {
+                ...state,
+                isAuthenticated: false,
+                token: null,
             };
         default:
             return state;

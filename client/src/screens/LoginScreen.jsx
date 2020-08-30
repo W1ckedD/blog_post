@@ -19,7 +19,7 @@ const LoginScreen = ({ errorMsg, login }) => {
         }
     };
     return (
-        <div>
+        <div className="w-50">
             {errorMsg && <Alert variant="danger">{errorMsg}</Alert>}
             <Form
                 onSubmit={e => {
@@ -44,7 +44,7 @@ const LoginScreen = ({ errorMsg, login }) => {
                         onChange={onChange}
                     />
                 </Form.Group>
-                <Button type='submit' variant='primary'>
+                <Button type='submit' variant='primary' block className="w-75 m-auto">
                     Login
                 </Button>
             </Form>

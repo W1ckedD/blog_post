@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
-const { use } = require('../routes/users');
 
 exports.register = async (req, res, next) => {
     try {
@@ -29,8 +28,9 @@ exports.register = async (req, res, next) => {
 exports.login = async (req, res, next) => {
     try {
         const { email, password } = req.body;
-        const user = await User.findOne({ email, isVerified: true });
+        const user = await User.findOne({ email });
         if (!user) {
+            console.log('not user')
             return res.status(422).json({ error: 'Invalid credentials' });
         }
         const match = await bcrypt.compare(password, user.password);
@@ -49,6 +49,19 @@ exports.login = async (req, res, next) => {
         return res.status(500).json({ error: 'Server error' });
     }
 };
+
+exports.currentUser = (req, res, next) => {
+    try {
+        const user = req.user;
+        return res.status(200).json({
+            success: true,
+            user
+        })
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({ error: 'Server error' });
+    }
+}
 
 exports.edituser = async (req, res, next) => {
     try {

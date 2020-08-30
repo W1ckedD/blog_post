@@ -1,5 +1,6 @@
 const express = require('express');
 const dotenv = require('dotenv');
+const path = require('path');
 dotenv.config({ path: './config/config.env' });
 require('./config/db.js')();
 const requireUser = require('./middlewares/requireUser');
@@ -10,6 +11,8 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(require('morgan')('dev'));
+
+app.use('/api/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Routes
 

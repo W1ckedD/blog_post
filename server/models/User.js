@@ -19,7 +19,10 @@ const userSchema = new mongoose.Schema({
     name: {
         type: String,
     },
-    imgUrl: String,
+    imgUrl: {
+        type: String,
+        default: '/api/uploads/defaultProfileImage.jpg'
+    },
     birthday: Date,
     location: String,
     bio: String,

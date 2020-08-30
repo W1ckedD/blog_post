@@ -1,27 +1,36 @@
-import React from 'react';
-import { Provider } from 'react-redux';
-import store from './store';
+import React, { useEffect } from 'react';
 import { Container } from 'react-bootstrap';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { authenticate } from './actions/authActions';
+import { clearError } from './actions/errorActions';
 
 // Components
 import AppNavbar from './components/navigation/AppNavbar';
 
 // Screens
 import LoginNavigation from './components/navigation/LoginNavigation';
-import MainScreen from './screens/MainScreen';
+import MainNavigation from './components/navigation/MainNavigation';
 
-function App() {
+function App({ authenticate, clearError, isAuthenticated }) {
+    useEffect(() => {
+        clearError();
+        authenticate();
+    }, []);
     return (
-        <Provider store={store}>
-            <Router>
-                <AppNavbar />
-                <Container className='App'>
-                    <LoginNavigation />
-                </Container>
-            </Router>
-        </Provider>
+        <Router>
+            <AppNavbar />
+            <Container className='d-flex flex-column align-items-center'>
+                {isAuthenticated ? <MainNavigation /> : <LoginNavigation />}
+            </Container>
+        </Router>
     );
 }
 
-export default App;
+const mapStateToProps = state => {
+    return {
+        isAuthenticated: state.auth.isAuthenticated,
+    };
+};
+
+export default connect(mapStateToProps, { authenticate, clearError })(App);
