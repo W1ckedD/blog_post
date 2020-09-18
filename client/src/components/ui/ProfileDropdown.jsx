@@ -7,7 +7,6 @@ import { clearError } from '../../actions/errorActions';
 import { Link } from 'react-router-dom';
 
 const ProfileDropdown = ({
-    name,
     user,
     getCurrentUser,
     clearError,
@@ -24,7 +23,7 @@ const ProfileDropdown = ({
                 style={{ width: 40 }}
                 src={user ? user.imgUrl : ''}
             />
-            <NavDropdown title={name}>
+            <NavDropdown title={user ? user.name ? user.name : user.email : ''}>
                 <NavDropdown.Item>
                     <Link className="nav-dropdown-item" to="/edit-profile">Profile</Link>
                 </NavDropdown.Item>
@@ -37,7 +36,7 @@ const ProfileDropdown = ({
 
 const mapStateToProps = state => {
     return {
-        user: state.user.user,
+        user: state.user.user
     };
 };
 

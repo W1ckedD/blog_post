@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 
 const AppNavbar = ({ isAuthenticated }) => {
     return (
-        <Navbar bg='primary' variant='dark' expand='lg'>
+        <Navbar bg='primary' variant='dark'>
             <Navbar.Brand>
                 <Link to='/' className='navbar-brand'>
                     Infinity
@@ -35,7 +35,7 @@ const AppNavbar = ({ isAuthenticated }) => {
                 </Nav>
                 {isAuthenticated ? (
                     <Nav className='ml-auto'>
-                        <ProfileDropdown name='Kate' />
+                        <ProfileDropdown />
                     </Nav>
                 ) : (
                     <Nav className='ml-auto'>
